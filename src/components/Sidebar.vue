@@ -1,20 +1,17 @@
 <template>
-  <div class="jumbotron">
-    <h1>任务追踪</h1>
-    <p>
-      <strong>
-        <router-link to="/time-entries">创建一个任务</router-link>
-      </strong>
-    </p>
-  </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="text-center">已有时长</h1> </div>
+        <div class="panel-body">
+            <h1 class="text-center">{{ time }} 小时</h1> </div>
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'home',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  computed: {
+    time () {
+      return this.$store.state.totalTime
     }
   }
 }

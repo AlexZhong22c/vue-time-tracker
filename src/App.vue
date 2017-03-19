@@ -7,14 +7,15 @@
           计划表
         </a>
         <ul class="nav navbar-nav">
-          <li><a v-link="'/home'">首页</a></li>
-          <li><a v-link="'/time-entries'">计划列表</a></li>
+          <li><router-link to="/home">首页</router-link></li>
+          <li><router-link to="/time-entries">计划列表</router-link></li>
+          <li><router-link to="/time-entries/log-time">log-time</router-link></li>
         </ul>
       </div>
     </nav>
     <div class="container">
       <div class="col-sm-3">
-
+        <sidebar :time="totalTime"></sidebar>
       </div>
       <div class="col-sm-9">
         <router-view></router-view>
@@ -24,8 +25,33 @@
 </template>
 
 <script>
+import Sidebar from '@/components/Sidebar.vue'
 export default {
-  name: 'app'
+  components: {
+    Sidebar: Sidebar
+  },
+  data () {
+    return {
+      totalTime: 2
+    }
+  },
+  methods: {
+    deleteTime (timeEntry) {
+      this.totalTime -= parseFloat(timeEntry.totalTime)
+    },
+    timeUpdate (timeEntry) {
+      console.log('app')
+      this.totalTime += parseFloat(timeEntry.totalTime)
+    }
+  },
+  events: {
+    timeUpdate (timeEntry) {
+      this.totalTime += parseFloat(timeEntry.totalTime)
+    },
+    deleteTime (timeEntry) {
+      this.totalTime -= parseFloat(timeEntry.totalTime)
+    }
+  }
 }
 </script>
 
