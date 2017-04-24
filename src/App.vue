@@ -32,24 +32,6 @@ export default {
   },
   data () {
     return {
-      totalTime: 2
-    }
-  },
-  methods: {
-    deleteTime (timeEntry) {
-      this.totalTime -= parseFloat(timeEntry.totalTime)
-    },
-    timeUpdate (timeEntry) {
-      console.log('app')
-      this.totalTime += parseFloat(timeEntry.totalTime)
-    }
-  },
-  events: {
-    timeUpdate (timeEntry) {
-      this.totalTime += parseFloat(timeEntry.totalTime)
-    },
-    deleteTime (timeEntry) {
-      this.totalTime -= parseFloat(timeEntry.totalTime)
     }
   }
 }

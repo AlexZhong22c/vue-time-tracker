@@ -1,8 +1,9 @@
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
+// vueLoaderConfig也是同样基础生产环境和开发环境对vue-loader进行的配置：
 var vueLoaderConfig = require('./vue-loader.conf')
-
+// 这封装了一个函数，进行传参，获取绝对路径，方便对import时引入地址的方便填写
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -22,7 +23,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      '@': resolve('src')
     }
   },
   module: {

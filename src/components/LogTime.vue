@@ -58,6 +58,7 @@
         }
         this.$store.dispatch('savePlan', plan)
         this.$store.dispatch('addTotalTime', this.totalTime)
+        console.log('before store:' + typeof (this.totalTime))
         this.$router.go(-1)
       }
     }

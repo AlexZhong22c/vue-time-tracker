@@ -52,7 +52,6 @@
               X
               </button>
             </div>
-
           </div>
         </a>
 
