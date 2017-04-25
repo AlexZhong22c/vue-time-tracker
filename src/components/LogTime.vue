@@ -41,15 +41,11 @@
 </style>
 <script>
     export default{
-      name:"logtime",
+      name:"logtime", // 给一个名字方便调试
       data () {
         return {
           timeEntry: {
-          // user: {
-          //   name: 'xxx',
-          //   email: 'xxxxxxx',
-          //   image: 'xxxxxxx'
-          // },
+            // 用v-model从表单处拿到数据
           }
         }
       },

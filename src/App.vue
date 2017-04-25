@@ -35,16 +35,13 @@ export default {
     }
   },
   mounted: function () {
-    this.$nextTick(function () {
-      // 代码保证 this.$el 在 document 中
-      this.$http.get('http://localhost:8888/time')
-        .then(function (ret) {
-          this.$store.dispatch('saveTotalTime', ret.data.time)
-        })
-        .then(function (err) {
-          console.log(err)
-        })
-    })
+    this.$http.get('http://localhost:8888/time')
+      .then(function (ret) {
+        this.$store.dispatch('saveTotalTime', ret.data.time)
+      })
+      .then(function (err) {
+        console.log(err)
+      })
   }
 }
 </script>

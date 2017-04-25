@@ -72,31 +72,19 @@
       }
     },
     created () {
-      // 组件创建完后获取数据，
-      // 此时 data 已经被 observed 了
+      // 组件创建完后获取数据，此时 data 已经被 observed 了
+      // 在created的时机执行，是因为我们fetchData()要判断isLoading的状态
       this.fetchData()
     },
-    watch: {
-      // 如果路由有变化，会再次执行该方法
-      '$route': 'fetchData'
-    },
-    // route: {
-    //   beforeRouteEnter (to, from, next) {
-    //     next(vm => {
-    //       // 通过 `vm` 取代this访问组件实例
-    //       vm.$http.get('http://localhost:8888/time-entries')
-    //         .then(function (ret) {
-    //           vm.timeEntries = ret.data
-    //         })
-    //         .then(function (err) {
-    //           console.log(err)
-    //         })
-    //     })
-    //   }
+    // watch: {
+    //   watch可以和计算属性做比较
+    //   如果路由有变化，会再次执行该方法
+    //   由于我们用了vuex--让timeEntries作为计算属性就能拿到数据，不必fetchData
+    //   '$route': 'fetchData'
     // },
     computed: {
       timeEntries () {
-        // 从store中取出数据，timeEntry其实等同于plan !!
+        // 从store中取出数据，这个demo里timeEntry其实等同于plan !!
         return this.$store.state.planArr
       }
     },
@@ -124,10 +112,8 @@
             .then(function (err) {
               console.log(err)
             })
-          // this.$dispatch('deleteTime', index)
-          // $dispatch是vue1.x的写法，现已被废除，改为vuex：
-          // this.$store.dispatch('decTotalTime', timeEntry.totalTime)
-
+          // this.$dispatch('deletePlan', timeEntry)，事件*通信*的写法
+          // $dispatch是vue1.x的写法，现已被废除，改为vuex来*通信*：
           this.$store.dispatch('deletePlan', timeEntry)
         }
       }
