@@ -16,40 +16,40 @@
     <router-view></router-view>
 
     <div class="time-entries">
-      <p v-if="!plans.length"><strong>还没有任何计划</strong></p>
+      <p v-if="!timeEntries.length"><strong>还没有任何计划</strong></p>
 
       <div class="list-group">
-        <a class="list-group-item" v-for="(plan,index) in plans">
+        <a class="list-group-item" v-for="timeEntry in timeEntries">
           <div class="row">
-            <div class="col-sm-2 user-details">    
-              <img :src="plan.avatar" class="avatar img-circle img-responsive" />
-              <p class="text-center">
-                <strong>
-                  {{ plan.name }}
-                </strong>
-              </p>
-            </div>
+          <div class="col-sm-2 user-details">
+            <img src="http://olqa2s510.bkt.clouddn.com/logo.jpg" class="avatar img-circle img-responsive" alt="logo" />
+            <p class="text-center">
+              <strong>
+                Alex Zhong
+              </strong>
+            </p>
+          </div>
 
             <div class="col-sm-2 text-center time-block">
               <h3 class="list-group-item-text total-time">
                 <i class="glyphicon glyphicon-time"></i>
-                {{ plan.totalTime }}
+                {{ timeEntry.totalTime }}
               </h3>
               <p class="label label-primary text-center">
                 <i class="glyphicon glyphicon-calendar"></i>
-                {{ plan.date }}
+                {{ timeEntry.date }}
               </p>
             </div>
 
             <div class="col-sm-7 comment-section">
-              <p>{{ plan.comment }}</p>
+              <p>{{ timeEntry.comment }}</p>
             </div>
 
             <div class="col-sm-1">
               <button
                 class="btn btn-xs btn-danger delete-button"
-                @click="deletePlan(index)">
-              X
+                @click="deleteTimeEntry(timeEntry)">
+                X
               </button>
             </div>
           </div>
@@ -57,25 +57,79 @@
 
       </div>
     </div>
+    <div style="text-align:center;font-size:20px;" v-if="isLoading">
+    <strong>data is Loading...</strong>
+  </div>
   </div>
 </template>
 
 <script>
   export default {
     name: 'TimeEntries',
+    data () {
+      return {
+        isLoading: false // 目前是否位于正在加载状态
+      }
+    },
+    created () {
+      // 组件创建完后获取数据，
+      // 此时 data 已经被 observed 了
+      this.fetchData()
+    },
+    watch: {
+      // 如果路由有变化，会再次执行该方法
+      '$route': 'fetchData'
+    },
+    // route: {
+    //   beforeRouteEnter (to, from, next) {
+    //     next(vm => {
+    //       // 通过 `vm` 取代this访问组件实例
+    //       vm.$http.get('http://localhost:8888/time-entries')
+    //         .then(function (ret) {
+    //           vm.timeEntries = ret.data
+    //         })
+    //         .then(function (err) {
+    //           console.log(err)
+    //         })
+    //     })
+    //   }
+    // },
     computed: {
-      plans () {
-        // 从store中取出数据
-        return this.$store.state.list
+      timeEntries () {
+        // 从store中取出数据，timeEntry其实等同于plan !!
+        return this.$store.state.planArr
       }
     },
     methods: {
-      deletePlan (idx) {
-        // 稍后再来说这里的方法
-        // 减去总时间
-        this.$store.dispatch('decTotalTime', this.plans[idx].totalTime)
-        // 删除该计划
-        this.$store.dispatch('deletePlan', idx)
+      fetchData () {
+        this.isLoading = true
+        this.$http.get('http://localhost:8888/time-entries')
+          .then(function (ret) {
+            this.$store.dispatch('savePlans', ret.data)
+            this.isLoading = false
+          })
+          .then(function (err) {
+            console.log(err)
+          })
+      },
+      deleteTimeEntry (timeEntry) {
+        let index = this.timeEntries.indexOf(timeEntry)
+        let _id = this.timeEntries[index]._id
+        if (window.confirm('确认删除?')) {
+          // 去到后台，数据库根据_id来删除对应记录
+          this.$http.delete('http://localhost:8888/delete/' + _id)
+            .then(function (ret) {
+              console.log(ret)
+            })
+            .then(function (err) {
+              console.log(err)
+            })
+          // this.$dispatch('deleteTime', index)
+          // $dispatch是vue1.x的写法，现已被废除，改为vuex：
+          // this.$store.dispatch('decTotalTime', timeEntry.totalTime)
+
+          this.$store.dispatch('deletePlan', timeEntry)
+        }
       }
     }
   }

@@ -9,17 +9,19 @@ export default {
   [types.DEC_TOTAL_TIME] (state, time) {
     state.totalTime = Number(state.totalTime) - Number(time)
   },
+  [types.SAVE_TOTAL_TIME] (state, time) {
+    state.totalTime = Number(time)
+  },
+  // 保存从后台拿到的所有计划
+  [types.SAVE_PLANS] (state, plans) {
+    state.planArr = plans
+  },
   // 新增计划
-  [types.SAVE_PLAN] (state, plan) {
-    // 设置默认值，未来我们可以做登入直接读取昵称和头像
-    const avatar = 'https://sfault-avatar.b0.upaiyun.com/147/223/147223148-573297d0913c5_huge256'
-
-    state.list.push(
-      Object.assign({ name: '二哲', avatar: avatar }, plan)
-    )
+  [types.APPEND_PLAN] (state, plan) {
+    state.planArr.push(plan)
   },
   // 删除某计划
   [types.DELETE_PLAN] (state, idx) {
-    state.list.splice(idx, 1)
+    state.planArr.splice(idx, 1)
   }
 }
