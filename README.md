@@ -1,4 +1,4 @@
-vue-cli + vue2 + vue-router + vue-resource + vuex2 + express + mongoDB
+vue-cli + vue2 + vue-router + vue-resource + vuex2 + express + mongoose
 
 原博文地址：[https://alexzhong22c.github.io/2017/04/25/vue-time-tracker/](https://alexzhong22c.github.io/2017/04/25/vue-time-tracker/)
 
@@ -8,6 +8,7 @@ vue-cli + vue2 + vue-router + vue-resource + vuex2 + express + mongoDB
 - 使用vue-resource请求我们的node服务端，即express
 - 使用vuex管理我们的数据流
 - express 和 MongoDB做后台和数据库，演示了前后台的数据交互，ajax请求
+- 使用mongoose操作MongoDB
 
 ## 运行demo:
 
@@ -23,7 +24,14 @@ node app.js // 会在8888端口开启一个后台
 npm run dev
 ```
 
-## 知识速查
+### 历史版本的commit记录：
+
+| commit名           | commit时间  | 版本内容                                     |
+| ----------------- | --------- | ---------------------------------------- |
+| finish-first-time | 2017/4/25 | vue-cli + vue2 + vue-router + vue-resource + vuex2 + express + MongoDB |
+| use-mongoose      | 2017/4/26 | 使用mongoose，重写app.js文件，使其简单易懂             |
+
+## 懒人速查
 
 ### main.js文件
 
@@ -77,6 +85,42 @@ this.$store.dispatch('deletePlan', timeEntry)，用vuex*通信*
 ### LogTime.vue文件
 
 组件可以没有“name"，如果给组件一个name可以方便在调试的时候在控制台打印错误是来自哪个组件的
+
+### app.js文件
+
+> demo经过了版本更新，原本使用MongoClient，现在用mongoose改写了一次
+
+#### mpromise (mongoose's default promise library) is deprecated
+
+http://blog.csdn.net/fd214333890/article/details/53486862
+
+增加一句： `mongoose.Promise = global.Promise` 即可
+
+#### mongoose是怎么找collections的?
+
+https://cnodejs.org/topic/4f71363f8a04d82a3d1e4aea
+
+```
+mongoose.model('User', UserSchema);
+```
+
+去命令行：
+
+```
+use node_club show collections //只能看到有一个名为users的collection，而没有User的collection
+```
+
+由此我们可以推断mongoose在内部创建collection时将我们传递的collection名小写化，同时如果小写化的名称后面没有字母——s,则会在其后面添加一s,针对我们刚建的collection,则会命名为：users。
+
+**可以通过下面两种方式更改collection的名字：**
+
+```
+1.xxschema = new Schema({
+…
+}, {collection: “your collection name”});
+
+2.mongoose.model(‘User’, UserSchema, “your collection name”);
+```
 
 ## 深入理解数据的请求
 

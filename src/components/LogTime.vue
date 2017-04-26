@@ -33,6 +33,8 @@
     </div>
     <button class="btn btn-primary" @click="save()">保存</button>
     <!-- <button v-link="'/time-entries'" class="btn btn-danger">取消</button> -->
+    <!-- router-link先改变路径。而vue-router再根据路径和 路由的配置 来决定子组件们是否加载 -->
+    <!-- 如果某个子组件要被加载，就被加载到router-view标签处 -->
     <router-link to="/time-entries" class="btn btn-danger">取消</router-link>
     <hr>
   </div>
