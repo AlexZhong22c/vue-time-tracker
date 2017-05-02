@@ -91,27 +91,44 @@
     methods: {
       fetchData () {
         this.isLoading = true
-        this.$http.get('http://localhost:8888/time-entries')
-          .then(function (ret) {
-            this.$store.dispatch('savePlans', ret.data)
-            this.isLoading = false
-          })
-          .then(function (err) {
-            console.log(err)
-          })
+        // this.$http.get('http://localhost:8888/time-entries')
+        //   .then(function (ret) {
+        //     this.$store.dispatch('savePlans', ret.data)
+        //     this.isLoading = false
+        //   })
+        //   .then(function (err) {
+        //     console.log(err)
+        //   })
+
+        // 使用axios改写，参考LogTime.vue文件的注释说明：
+        this.$ajax.get('http://localhost:8888/time-entries').then(res => {
+          this.$store.dispatch('savePlans', res.data)
+          this.isLoading = false
+        }).catch(error => {
+          console.log(error)
+        })
       },
       deleteTimeEntry (timeEntry) {
         let index = this.timeEntries.indexOf(timeEntry)
         let _id = this.timeEntries[index]._id
         if (window.confirm('确认删除?')) {
           // 去到后台，数据库根据_id来删除对应记录
-          this.$http.delete('http://localhost:8888/delete/' + _id)
-            .then(function (ret) {
-              console.log(ret)
+          // this.$http.delete('http://localhost:8888/delete/' + _id)
+          //   .then(function (ret) {
+          //     console.log(ret)
+          //   })
+          //   .then(function (err) {
+          //     console.log(err)
+          //   })
+
+          // 使用axios改写，参考LogTime.vue文件的注释说明：
+          this.$ajax.delete('http://localhost:8888/delete/' + _id)
+            .then(res => {
+              console.log(res)
+            }).catch(error => {
+              console.log(error)
             })
-            .then(function (err) {
-              console.log(err)
-            })
+
           // this.$dispatch('deletePlan', timeEntry)，事件*通信*的写法
           // $dispatch是vue1.x的写法，现已被废除，改为vuex来*通信*：
           this.$store.dispatch('deletePlan', timeEntry)

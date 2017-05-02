@@ -35,13 +35,19 @@ export default {
     }
   },
   mounted: function () {
-    this.$http.get('http://localhost:8888/time')
-      .then(function (ret) {
-        this.$store.dispatch('saveTotalTime', ret.data.time)
-      })
-      .then(function (err) {
-        console.log(err)
-      })
+    // this.$http.get('http://localhost:8888/time')
+    //   .then(function (ret) {
+    //     this.$store.dispatch('saveTotalTime', ret.data.time)
+    //   })
+    //   .then(function (err) {
+    //     console.log(err)
+    //   })
+    // 使用axios改写，参考LogTime.vue文件的注释说明：
+    this.$ajax.get('http://localhost:8888/time').then(res => {
+      this.$store.dispatch('saveTotalTime', res.data.time)
+    }).catch(error => {
+      console.log(error)
+    })
   }
 }
 </script>

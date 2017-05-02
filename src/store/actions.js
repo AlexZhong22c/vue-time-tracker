@@ -28,6 +28,7 @@ export default {
     commit(types.ADD_TOTAL_TIME, plan.totalTime)
   },
   deletePlan ({ commit, state }, plan) {
+    // 万一找不到index出错怎么办??
     let index = state.planArr.indexOf(plan)
     commit(types.DELETE_PLAN, index)
 

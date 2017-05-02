@@ -7,10 +7,12 @@ import TimeEntries from './components/TimeEntries.vue'
 import store from './store' // 这个文件夹和vuex有关
 // import 'bootstrap/dist/css/bootstrap.css' // 这个项目直接在头部link标签引入bootstrap的CDN，所以暂时不需要import
 
-import VueRouter from 'vue-router'
-import VueResource from 'vue-resource' // 先用着vue-resource，之后会改为axios
+import axios from 'axios'
+Vue.prototype.$ajax = axios
+// 在 main.js 中添加了这两行代码之后，就能直接在组件的 methods 中使用 $ajax 命令
 
-Vue.use(VueResource)
+import VueRouter from 'vue-router'
+
 Vue.use(VueRouter)
 
 Vue.config.productionTip = false

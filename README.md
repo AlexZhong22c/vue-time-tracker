@@ -1,14 +1,24 @@
-vue-cli + vue2 + vue-router + vue-resource + vuex2 + express + mongoose
+vue-cli + vue2 + vue-router + axios + vuex2 + express + mongoose
+
+一个简单的ToDoList——经典vue单页路由入门全家桶，我在大神们demo的基础上不断地改进。
 
 原博文地址：[https://alexzhong22c.github.io/2017/04/25/vue-time-tracker/](https://alexzhong22c.github.io/2017/04/25/vue-time-tracker/)
 
 - 使用vue-cli创建项目
 - .vue文件组件化的开发
 - 使用vue-router实现单页路由
-- 使用vue-resource请求我们的node服务端，即express
+- 使用axios请求我们的node服务端，即express
 - 使用vuex管理我们的数据流
 - express 和 MongoDB做后台和数据库，演示了前后台的数据交互，ajax请求
 - 使用mongoose操作MongoDB
+
+“计划列表”界面
+
+![演示图1](http://olqa2s510.bkt.clouddn.com/time-tracker1.png)
+
+创建任务：
+
+![演示图2](http://olqa2s510.bkt.clouddn.com/time-tracker2.png)
 
 ## 运行demo:
 
@@ -30,6 +40,7 @@ npm run dev
 | ----------------- | --------- | ---------------------------------------- |
 | finish-first-time | 2017/4/25 | vue-cli + vue2 + vue-router + vue-resource + vuex2 + express + MongoDB |
 | use-mongoose      | 2017/4/26 | 使用mongoose，重写app.js文件，使其简单易懂             |
+| use-axios         | 2017/5/2  | 使用axios代替原来的vue-resource                 |
 
 ## 懒人速查
 
@@ -39,7 +50,7 @@ npm run dev
 
 
 - `...App`这句代码等价于`render:h => h(App)`
-- 这个demo我们用了vue-router，官方推荐使用新的axios，之后会改为用axios做ajax请求
+- 使用axios代替原来的vue-resource做ajax请求
 
 #### eslint-disable no-new
 
@@ -84,7 +95,8 @@ this.$store.dispatch('deletePlan', timeEntry)，用vuex*通信*
 
 ### LogTime.vue文件
 
-组件可以没有“name"，如果给组件一个name可以方便在调试的时候在控制台打印错误是来自哪个组件的
+- 组件可以没有“name"，如果给组件一个name可以方便在调试的时候在控制台打印错误是来自哪个组件的
+- 对 [axios](#axios在vue中如何使用) 的用法做了粗浅介绍
 
 ### app.js文件
 
@@ -160,6 +172,38 @@ vue实例的生命周期看这一篇：http://blog.csdn.net/sexy_squirrel/articl
 - **尤其是“查”，页面切换回来或者路由切换回来的时候，需要重复再查一次此页的数据。** 使用vuex后，查数据不必去用ajax访问数据库，直接从state查数据就行了
 
 结论：使用vuex后，原本这次需要调用fetchData函数去再查数据库，而现在直接用计算属性从state那里查就行了。
+
+---
+
+>2017/5/2更新：使用axios代替原来的vue-resource：
+
+### axios在vue中如何使用
+
+安装其他插件的时候，可以直接在 main.js 中引入并 Vue.use()，但是 axios 并不能 use，只能在每个需要发送请求的组件中即时引入。
+
+为了解决这个问题，有两种开发思路，一是在引入 axios 之后，修改原型链，（另一种是在vuex的actions内封装一下，由于考虑到某些小伙伴不使用vuex，我们选用第一种方法）。
+
+> 对这方面好奇的同学可以参考：http://blog.csdn.net/fen747042796/article/details/70660419?locationNum=6&fps=1
+
+在 main.js 中引入 axios：
+
+```
+import axios from 'axios'
+Vue.prototype.$ajax = axios
+// 在 main.js 中添加了这两行代码之后，就能直接在组件的 methods 中使用 $ajax 命令
+```
+
+http://www.cnblogs.com/wisewrong/p/6402183.html
+
+#### 回调函数的this
+
+当请求成功时，会执行 .then，否则执行 .catch
+
+这两个回调函数都有各自独立的作用域，**如果直接在里面访问 this，将会无法访问到 Vue 实例**，所以我们改为用箭头函数，详见demo中LogTime.vue文件的注释说明。
+
+https://segmentfault.com/q/1010000005932552
+
+http://blog.csdn.net/qtwwyl/article/details/70094361?utm_source=itdadao&utm_medium=referral
 
 ## 深入理解vuex
 

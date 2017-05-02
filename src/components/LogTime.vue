@@ -53,15 +53,32 @@
       },
       methods: {
         save () {
-          this.$http.post('http://localhost:8888/create', {
+          // this.$http.post('http://localhost:8888/create', {
+          //   comment: this.timeEntry.comment,
+          //   totalTime: this.timeEntry.totalTime,
+          //   date: this.timeEntry.date
+          // }).then(function (ret) {
+          //   let timeEntry = this.timeEntry
+          //   this.$store.dispatch('appendPlan', timeEntry)
+          //   this.timeEntry = {}
+          //   this.$router.push('/time-entries')
+          // })
+
+          // 改为使用axios改写：
+          // 当请求成功时，会执行 .then，否则执行 .catch
+          // 这两个回调函数都有各自独立的作用域，如果直接在里面访问 this，将会无法访问到 Vue 实例，所以我们改为用箭头函数：
+          this.$ajax.post('http://localhost:8888/create', {
             comment: this.timeEntry.comment,
             totalTime: this.timeEntry.totalTime,
             date: this.timeEntry.date
-          }).then(function (ret) {
+          }).then(response => {
+            // 最好写一下根据response来判断创建是否成功的逻辑
             let timeEntry = this.timeEntry
             this.$store.dispatch('appendPlan', timeEntry)
             this.timeEntry = {}
             this.$router.push('/time-entries')
+          }).catch(error => {
+            console.log(error)
           })
         }
       }
