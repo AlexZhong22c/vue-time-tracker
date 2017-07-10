@@ -48,5 +48,5 @@ planSchema.statics = {
   }
 }
 
-// 导出movieSchema模式
+// 导出planSchema模式
 module.exports = planSchema

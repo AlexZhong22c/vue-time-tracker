@@ -207,6 +207,16 @@ http://blog.csdn.net/qtwwyl/article/details/70094361?utm_source=itdadao&utm_medi
 
 ## 深入理解vuex
 
+### state的数据在内存中
+
+vuex的本质作用是管理组件之间复杂的状态的（如购物车逻辑等等...）,所以当F5刷新浏览器时，这些状态也会一并被清空。
+
+如果想在F5之后不要丢失数据，一般都会采用cookie或者localStorage等方法存储：
+
+https://segmentfault.com/q/1010000007336361
+
+https://www.zhihu.com/question/54164220/answer/138185671
+
 ### 既然vuex2 可以直接去store拿state, 那getters还有什么用啊?
 
 getters可以看做是store的计算属性。另外，我们最好遵循vuex的通讯流程：
@@ -382,5 +392,4 @@ methods: {
 
 ## 最后还有小尾巴：
 
-- 这个demo我们用了vue-router，官方推荐使用新的axios，之后会改为用axios做ajax请求
 - 后台的代码主要在app.js文件里，已经解决了跨域请求的问题，还没有解释这部分代码

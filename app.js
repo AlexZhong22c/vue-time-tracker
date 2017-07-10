@@ -91,7 +91,7 @@ app.post('/create', function(req, res, next) {
 */
 // 重写创建计划：
 app.post('/create', function (req, res, next) {
-    //接收前端发送的字段
+    //接收前端发送过来的字段
   var plan = req.body
   var _plan = null
 
